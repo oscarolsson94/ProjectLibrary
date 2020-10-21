@@ -12,10 +12,11 @@ public class Main {
 			String input = scan.nextLine();
 			Library.Command command = library.parseCommand(input);
 
-			if (command == Library.Command.unknown) {
+			if (command == Library.Command.unknown) { //klar
 				library.handleUnknownCommand();
 				continue;
-			} else if (command == Library.Command.list) 
+			}
+			else if (command == Library.Command.list) 
 			{
 				library.handleListCommand();
 			}
@@ -27,7 +28,7 @@ public class Main {
 			{
 				library.handleCheckinCommand();
 			} 
-			else if (command == Library.Command.register) 
+			else if (command == Library.Command.register) // nästan klar
 			{
 				library.handleRegisterCommand();
 			} 
@@ -39,7 +40,7 @@ public class Main {
 			{
 				library.handleInfoCommand();
 			}
-			else if (command == Library.Command.quit) 
+			else if (command == Library.Command.quit) //klar
 			{
 				library.handleQuitCommand();
 			}

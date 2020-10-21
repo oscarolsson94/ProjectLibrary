@@ -1,90 +1,137 @@
-public class Library{
-	
-enum Command{
-	
-	list,
-	checkout,
-	checkin,
-	register,
-	deregister,
-	info,
-	quit,
-	unknown
-	
-}
+import java.util.*;
 
-public Command parseCommand(String input) {
+public class Library {
 
-	String commandString = input.split(" ")[0];
-	commandString = commandString.toLowerCase();
+	public static Map<Integer, Masterpiece> registry = new TreeMap<>();
+	public static Map<Integer, String> IDandTitle = new TreeMap<>();
+	enum Command {
 
-	switch (commandString) {
-
-	case "list":
-		return Command.list;
-	case "checkout":
-		return Command.checkout;
-	case "checkin":
-		return Command.checkin;
-	case "register":
-		return Command.register;
-	case "deregister":
-		return Command.deregister;
-	case "info":
-		return Command.info;
-	case "quit":
-		return Command.quit;
-	default:
-		return Command.unknown;
+		list, checkout, checkin, register, deregister, info, quit, unknown
 
 	}
 
-}
+	public Command parseCommand(String input) {
 
-public String[] parseArguments(String input) {
-	String[] commandAndArguments = input.split(" ");
-	String[] arguments = new String[commandAndArguments.length - 1];
+		String commandString = input.split(" ")[0];
+		commandString = commandString.toLowerCase();
 
-	for (int i = 1; i < commandAndArguments.length; i++) {
-		arguments[i - 1] = commandAndArguments[i];
+		switch (commandString) {
+
+		case "list":
+			return Command.list;
+		case "checkout":
+			return Command.checkout;
+		case "checkin":
+			return Command.checkin;
+		case "register":
+			return Command.register;
+		case "deregister":
+			return Command.deregister;
+		case "info":
+			return Command.info;
+		case "quit":
+			return Command.quit;
+		default:
+			return Command.unknown;
+
+		}
+
 	}
-	return arguments;
-}
 
-public void handleUnknownCommand(){
-	System.out.println("Unknown command, try again");	
-}
+	public String[] parseArguments(String input) {
+		String[] commandAndArguments = input.split(" ");
+		String[] arguments = new String[commandAndArguments.length - 1];
 
-public void handleListCommand(){
-	
-}
+		for (int i = 1; i < commandAndArguments.length; i++) {
+			arguments[i - 1] = commandAndArguments[i];
+		}
+		return arguments;
+	}
 
-public void handleCheckinCommand(){
-	
-}
+	public void handleUnknownCommand() {
+		System.out.println("Unknown command, try again");
+	}
 
-public void handleCheckoutCommand(){
-	
-}
+	public void handleListCommand() {
 
-public void handleRegisterCommand(){
-	
-}
+	}
 
-public void handleDeregisterCommand(){
-	
-}
+	public void handleCheckinCommand() {
 
-public void handleInfoCommand(){
-	
-}
+	}
 
-public void handleQuitCommand(){
-	System.out.println("terminating program");
-	System.exit(0);
-}
-	
-	
-	
-	
+	public void handleCheckoutCommand() {
+
+	}
+
+	public void handleRegisterCommand() {
+		Scanner scan = new Scanner(System.in);
+
+		System.out.println("What are you registering? Book (b), Movie (m):");
+		String bookOrMovie = scan.nextLine(); // b eller m
+		System.out.println("Enter product ID:");
+		int prodID = Integer.parseInt(scan.nextLine()); // 55555
+		System.out.println("Enter title:");
+		String title = scan.nextLine(); // title string
+		System.out.println("Enter value:");
+		int value = Integer.parseInt(scan.nextLine());
+
+		if (bookOrMovie.equals("m")) {
+			System.out.println("Enter value:");
+			int length = Integer.parseInt(scan.nextLine());
+			System.out.println("Enter rating:");
+			float rating = Float.parseFloat(scan.nextLine());
+			if (registry.containsKey(prodID)) {
+				System.out.println("Error: Product with ID " + prodID + " already registered");
+				scan.close();
+				return;
+			} else 
+			{
+				registry.put(prodID, new Movie(value, prodID, length, rating));
+				// koppla titel till ID (i ny map?)? (iD=key, Titel=value)
+				IDandTitle.put(prodID, title);
+			}
+		}
+		else if (bookOrMovie.equals("b")) {
+			System.out.println("Enter number of pages:");
+			int pages = Integer.parseInt(scan.nextLine());
+			System.out.println("Enter publisher:");
+			String publisher = scan.nextLine();
+
+			if (registry.containsKey(prodID)) {
+				System.out.println("Error: Product with ID " + prodID + " already registered");
+				scan.close();
+				return;
+			} else 
+			{
+				registry.put(prodID, new Book(value, prodID, pages, publisher));
+				// koppla titel till ID (i ny map?)? (iD=key, Titel=value)
+				IDandTitle.put(prodID, title);
+			}
+		}
+		scan.close();
+		System.out.println("Successfully registered " + title);
+	}
+
+	public void handleDeregisterCommand() {
+		Scanner scan = new Scanner(System.in);
+		int key = Integer.parseInt(scan.nextLine());
+		if(registry.containsKey(key)) {
+			registry.remove(key);
+			System.out.println("Successfully deregistered " + IDandTitle.get(key));
+		}
+		else {
+		System.out.println("There is no product with that ID registered");	
+		}
+	}
+
+	public void handleInfoCommand() {
+
+	}
+
+	public void handleQuitCommand() {
+		System.out.println("terminating program");
+		System.exit(0);
+	}
+
 }

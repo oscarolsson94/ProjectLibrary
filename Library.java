@@ -53,7 +53,7 @@ public class Library {
 	}
 
 	public void handleListCommand() {
-
+		
 	}
 
 	public void handleCheckinCommand() {
@@ -68,16 +68,16 @@ public class Library {
 		Scanner scan = new Scanner(System.in);
 
 		System.out.println("What are you registering? Book (b), Movie (m):");
-		String bookOrMovie = scan.nextLine(); // b eller m
+		String bookOrMovie = scan.nextLine(); 
 		System.out.println("Enter product ID:");
-		int prodID = Integer.parseInt(scan.nextLine()); // 55555
+		int prodID = Integer.parseInt(scan.nextLine());
 		System.out.println("Enter title:");
-		String title = scan.nextLine(); // title string
+		String title = scan.nextLine(); 
 		System.out.println("Enter value:");
 		int value = Integer.parseInt(scan.nextLine());
 
 		if (bookOrMovie.equals("m")) {
-			System.out.println("Enter value:");
+			System.out.println("Enter length:");
 			int length = Integer.parseInt(scan.nextLine());
 			System.out.println("Enter rating:");
 			float rating = Float.parseFloat(scan.nextLine());
@@ -88,7 +88,6 @@ public class Library {
 			} else 
 			{
 				registry.put(prodID, new Movie(value, prodID, length, rating));
-				// koppla titel till ID (i ny map?)? (iD=key, Titel=value)
 				IDandTitle.put(prodID, title);
 			}
 		}
@@ -104,12 +103,11 @@ public class Library {
 				return;
 			} else 
 			{
-				registry.put(prodID, new Book(value, prodID, pages, publisher));
-				// koppla titel till ID (i ny map?)? (iD=key, Titel=value)
+				registry.put(prodID, new Book(value, prodID, pages, publisher));				
 				IDandTitle.put(prodID, title);
 			}
 		}
-		scan.close();
+		
 		System.out.println("Successfully registered " + title);
 	}
 
@@ -119,19 +117,30 @@ public class Library {
 		if(registry.containsKey(key)) {
 			registry.remove(key);
 			System.out.println("Successfully deregistered " + IDandTitle.get(key));
+			IDandTitle.remove(key);
 		}
 		else {
 		System.out.println("There is no product with that ID registered");	
 		}
 	}
 
-	public void handleInfoCommand() {
-
-	}
+	public void handleInfoCommand(String[] argument) {
+		int temp = Integer.parseInt(argument[0]);
+		if(registry.get(temp) instanceof Movie) {
+			System.out.println("(Movie) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value + "kr, " + registry.get(temp)); 
+		}
+		else {
+			System.out.println("(Book) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value + "kr, " + registry.get(temp)); 
+		}
+		}
+		
 
 	public void handleQuitCommand() {
 		System.out.println("terminating program");
 		System.exit(0);
 	}
 
+	public void save() { //skriv ner arrayer till fil.
+		
+	}
 }

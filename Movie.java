@@ -10,5 +10,29 @@ public class Movie extends Masterpiece {
 	}
 
 
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public float getRating() {
+		return rating;
+	}
+
+	public void setRating(float rating) {
+		this.rating = rating;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Length " + length + "m, " + "Rating " + rating;
+	}
+
+
+
 
 }

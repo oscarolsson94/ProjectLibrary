@@ -1,5 +1,6 @@
 public class Book extends Masterpiece {
 
+	
 	int numberOfPages;
 	String publisher;
 	
@@ -8,5 +9,26 @@ public class Book extends Masterpiece {
 		this.numberOfPages = numberOfPages;
 		this.publisher = publisher;
 	}	
+
+	public int getNumberOfPages() {
+		return numberOfPages;
+	}
+
+	public void setNumberOfPages(int numberOfPages) {
+		this.numberOfPages = numberOfPages;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	@Override
+	public String toString() {
+		return "Pages " + numberOfPages + ", Publisher " + publisher;
+	}
 
 }

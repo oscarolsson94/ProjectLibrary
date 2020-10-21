@@ -9,12 +9,18 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 
 		while (true) {
+			
+			System.out.println("Welcome! Would you like to list/checkout/checkin/register/deregister/info/quit");
+			
+			
 			String input = scan.nextLine();
+			
 			Library.Command command = library.parseCommand(input);
+			String[] argument = library.parseArguments(input);
 
 			if (command == Library.Command.unknown) { //klar
 				library.handleUnknownCommand();
-				continue;
+				
 			}
 			else if (command == Library.Command.list) 
 			{
@@ -28,9 +34,10 @@ public class Main {
 			{
 				library.handleCheckinCommand();
 			} 
-			else if (command == Library.Command.register) // nästan klar
+			else if (command == Library.Command.register)
 			{
 				library.handleRegisterCommand();
+				
 			} 
 			else if (command == Library.Command.deregister) 
 			{
@@ -38,7 +45,7 @@ public class Main {
 			} 
 			else if (command == Library.Command.info) 
 			{
-				library.handleInfoCommand();
+				library.handleInfoCommand(argument);
 			}
 			else if (command == Library.Command.quit) //klar
 			{

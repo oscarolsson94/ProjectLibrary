@@ -50,6 +50,39 @@ public String[] parseArguments(String input) {
 	}
 	return arguments;
 }
+
+public void handleUnknownCommand(){
+	System.out.println("Unknown command, try again");	
+}
+
+public void handleListCommand(){
+	
+}
+
+public void handleCheckinCommand(){
+	
+}
+
+public void handleCheckoutCommand(){
+	
+}
+
+public void handleRegisterCommand(){
+	
+}
+
+public void handleDeregisterCommand(){
+	
+}
+
+public void handleInfoCommand(){
+	
+}
+
+public void handleQuitCommand(){
+	System.out.println("terminating program");
+	System.exit(0);
+}
 	
 	
 	

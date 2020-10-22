@@ -28,11 +28,11 @@ public class Main {
 			}
 			else if (command == Library.Command.checkout) 
 			{
-				library.handleCheckoutCommand();
+				library.handleCheckoutCommand(argument);
 			}
 			else if (command == Library.Command.checkin) 
 			{
-				library.handleCheckinCommand();
+				library.handleCheckinCommand(argument);
 			} 
 			else if (command == Library.Command.register)
 			{
@@ -41,7 +41,7 @@ public class Main {
 			} 
 			else if (command == Library.Command.deregister) 
 			{
-				library.handleDeregisterCommand();
+				library.handleDeregisterCommand(argument);
 			} 
 			else if (command == Library.Command.info) 
 			{

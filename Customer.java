@@ -25,6 +25,11 @@ public void setCellNumber(String cellNumber) {
 	this.cellNumber = cellNumber;
 }
 
+@Override
+public String toString() {
+	return "Customer: " + name + ", phone number: " + cellNumber;
+}
+
 
 	
 	

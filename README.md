@@ -7,12 +7,12 @@ until you open the app again.
 
 To run the app, download the following classes: 
 
-Main
-Library
-Customer
-Masterpiece
-Movie
-Book
+Main,
+Library,
+Customer,
+Masterpiece,
+Movie,
+Book,
 
 You can download the .ser-files if you want, that will give u an initialized inventory.
 If you choose not to, these files will be craeted upon running the application for the first time.

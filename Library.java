@@ -128,11 +128,13 @@ public class Library {
 	public void handleRegisterCommand() {
 
 		try {
+			
 			Scanner scan = new Scanner(System.in);
 			System.out.println("Enter product ID:");
 			int prodID = Integer.parseInt(scan.nextLine());
 			System.out.println("What are you registering? Book (b), Movie (m):");
 			String bookOrMovie = scan.nextLine();
+			if(!(bookOrMovie.equals("b") || bookOrMovie.equals("m"))) throw new NumberFormatException();
 
 			if (!registry.containsKey(prodID)) {
 				System.out.println("Enter title:");
@@ -176,7 +178,7 @@ public class Library {
 				System.out.println("A product with that ID is already registered");
 			}
 		} catch (NumberFormatException e) {
-			System.out.println("Wrong format, enter valid type");
+			System.out.println("Illegal input, please follow the instructions.");
 		}
 	}
 

@@ -12,7 +12,7 @@ public class Main {
 		while (true) {
 
 			System.out.println(
-					"What would you like to do next? Available commands are: list/checkout/checkin/register/deregister/info/quit");
+					"What would you like to do next? Available commands are: list/checkout <id>/checkin <id>/register/deregister <id>/info/quit");
 			Scanner scan = new Scanner(System.in);
 			String input = scan.nextLine();
 

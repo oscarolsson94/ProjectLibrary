@@ -59,7 +59,7 @@ public class Library {
 
 		for (Integer x : registry.keySet()) {
 			String key = x.toString();
-			
+
 			if (registry.get(x) instanceof Book) {
 				if (checkedOut.containsKey(x)) {
 					System.out.println(
@@ -117,7 +117,6 @@ public class Library {
 		int prodID = Integer.parseInt(scan.nextLine());
 		System.out.println("What are you registering? Book (b), Movie (m):");
 		String bookOrMovie = scan.nextLine();
-		
 
 		if (!registry.containsKey(prodID)) {
 			System.out.println("Enter title:");
@@ -175,7 +174,7 @@ public class Library {
 				System.out.println("There is no product with that ID registered");
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
-			
+
 			System.out.println("Error, wrong format. Correct format is: 'deregister <productID>'");
 		}
 	}
@@ -206,24 +205,19 @@ public class Library {
 
 	public void save() {
 
-		try {
-			FileOutputStream fos1 = new FileOutputStream("hashmap.ser");
-			ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
+		try (FileOutputStream fos1 = new FileOutputStream("hashmap.ser");
+				ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
+				FileOutputStream fos2 = new FileOutputStream("treemap1.ser");
+				ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+				FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
+				ObjectOutputStream oos3 = new ObjectOutputStream(fos3);) {
+
 			oos1.writeObject(checkedOut);
-			oos1.close();
-			fos1.close();
 
-			FileOutputStream fos2 = new FileOutputStream("treemap1.ser");
-			ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
 			oos2.writeObject(registry);
-			oos2.close();
-			fos2.close();
 
-			FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
-			ObjectOutputStream oos3 = new ObjectOutputStream(fos3);
 			oos3.writeObject(IDandTitle);
-			oos3.close();
-			fos3.close();
+
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -235,38 +229,37 @@ public class Library {
 			File file1 = new File("hashmap.ser");
 			File file2 = new File("treemap1.ser");
 			File file3 = new File("treemap2.ser");
-			
-		
-			if(!file1.exists()) {
+
+			if (!file1.exists()) {
 				file1.createNewFile();
 			}
-			if(file3.length() != 0) {
-			FileInputStream fis1 = new FileInputStream(file1);
-			ObjectInputStream ois1 = new ObjectInputStream(fis1);
-			checkedOut = (HashMap) ois1.readObject();
-			ois1.close();
-			fis1.close();
+			if (file1.length() != 0) {
+				FileInputStream fis1 = new FileInputStream(file1);
+				ObjectInputStream ois1 = new ObjectInputStream(fis1);
+				checkedOut = (HashMap) ois1.readObject();
+				ois1.close();
+				fis1.close();
 			}
-			if(!file2.exists()) {
+			if (!file2.exists()) {
 				file2.createNewFile();
 			}
-			if(file2.length() != 0) {
-			FileInputStream fis2 = new FileInputStream(file2);
-			ObjectInputStream ois2 = new ObjectInputStream(fis2);
-			registry = (TreeMap) ois2.readObject();
-			ois2.close();
-			fis2.close();
+			if (file2.length() != 0) {
+				FileInputStream fis2 = new FileInputStream(file2);
+				ObjectInputStream ois2 = new ObjectInputStream(fis2);
+				registry = (TreeMap) ois2.readObject();
+				ois2.close();
+				fis2.close();
 			}
-			
-			if(!file3.exists()) {
+
+			if (!file3.exists()) {
 				file3.createNewFile();
 			}
-			if(file3.length() != 0) {
-			FileInputStream fis3 = new FileInputStream(file3);
-			ObjectInputStream ois3 = new ObjectInputStream(fis3);
-			IDandTitle = (TreeMap) ois3.readObject();
-			ois3.close();
-			fis3.close();
+			if (file3.length() != 0) {
+				FileInputStream fis3 = new FileInputStream(file3);
+				ObjectInputStream ois3 = new ObjectInputStream(fis3);
+				IDandTitle = (TreeMap) ois3.readObject();
+				ois3.close();
+				fis3.close();
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

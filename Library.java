@@ -81,6 +81,7 @@ public class Library {
 
 	public void handleCheckinCommand(String[] argument) {
 		try {
+			if(argument.length > 1) throw new IndexOutOfBoundsException();
 			int key = Integer.parseInt(argument[0]);
 
 			if (checkedOut.containsKey(key)) {
@@ -97,6 +98,7 @@ public class Library {
 
 	public void handleCheckoutCommand(String[] argument) {
 		try {
+			if(argument.length > 1) throw new IndexOutOfBoundsException();
 			Scanner scan = new Scanner(System.in);
 			int key = Integer.parseInt(argument[0]);
 			if (!checkedOut.containsKey(key)) {
@@ -105,6 +107,7 @@ public class Library {
 				String name = scan.nextLine();
 				System.out.println("What is " + name + "'s " + "phone number?");
 				String number = scan.nextLine();
+
 				if (registry.containsKey(key)) {
 					checkedOut.put(key, new Customer(name, number));
 					System.out
@@ -179,6 +182,7 @@ public class Library {
 
 	public void handleDeregisterCommand(String[] argument) {
 		try {
+			if(argument.length > 1) throw new IndexOutOfBoundsException();
 			int key = Integer.parseInt(argument[0]);
 			if (registry.containsKey(key)) {
 				registry.remove(key);
@@ -197,6 +201,7 @@ public class Library {
 
 	public void handleInfoCommand(String[] argument) {
 		try {
+			if(argument.length > 1) throw new IndexOutOfBoundsException();
 			int temp = Integer.parseInt(argument[0]);
 			if (registry.containsKey(temp)) {
 				if (registry.get(temp) instanceof Movie) {

@@ -12,7 +12,7 @@ Library,
 Customer,
 Masterpiece,
 Movie,
-Book,
+Book.
 
 You can download the .ser-files if you want, that will give u an initialized inventory.
 If you choose not to, these files will be craeted upon running the application for the first time.

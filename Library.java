@@ -59,8 +59,7 @@ public class Library {
 
 		for (Integer x : registry.keySet()) {
 			String key = x.toString();
-			String value = registry.get(x).toString();
-
+			
 			if (registry.get(x) instanceof Book) {
 				if (checkedOut.containsKey(x)) {
 					System.out.println(
@@ -114,10 +113,11 @@ public class Library {
 	public void handleRegisterCommand() {
 		Scanner scan = new Scanner(System.in);
 
-		System.out.println("What are you registering? Book (b), Movie (m):");
-		String bookOrMovie = scan.nextLine();
 		System.out.println("Enter product ID:");
 		int prodID = Integer.parseInt(scan.nextLine());
+		System.out.println("What are you registering? Book (b), Movie (m):");
+		String bookOrMovie = scan.nextLine();
+		
 
 		if (!registry.containsKey(prodID)) {
 			System.out.println("Enter title:");
@@ -163,31 +163,39 @@ public class Library {
 	}
 
 	public void handleDeregisterCommand(String[] argument) {
-		int key = Integer.parseInt(argument[0]);
-		if (registry.containsKey(key)) {
-			registry.remove(key);
-			System.out.println("Successfully deregistered " + IDandTitle.get(key));
-			IDandTitle.remove(key);
-			if (checkedOut.containsKey(key))
-				checkedOut.remove(key);
-		} else {
-			System.out.println("There is no product with that ID registered");
+		try {
+			int key = Integer.parseInt(argument[0]);
+			if (registry.containsKey(key)) {
+				registry.remove(key);
+				System.out.println("Successfully deregistered " + IDandTitle.get(key));
+				IDandTitle.remove(key);
+				if (checkedOut.containsKey(key))
+					checkedOut.remove(key);
+			} else {
+				System.out.println("There is no product with that ID registered");
+			}
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
+			
+			System.out.println("Error, wrong format. Correct format is: 'deregister <productID>'");
 		}
 	}
 
 	public void handleInfoCommand(String[] argument) {
-		int temp = Integer.parseInt(argument[0]);
-
-		if (registry.containsKey(temp)) {
-			if (registry.get(temp) instanceof Movie) {
-				System.out.println("(Movie) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
-						+ "kr, " + registry.get(temp));
+		try {
+			int temp = Integer.parseInt(argument[0]);
+			if (registry.containsKey(temp)) {
+				if (registry.get(temp) instanceof Movie) {
+					System.out.println("(Movie) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
+							+ "kr, " + registry.get(temp));
+				} else {
+					System.out.println("(Book) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
+							+ "kr, " + registry.get(temp));
+				}
 			} else {
-				System.out.println("(Book) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
-						+ "kr, " + registry.get(temp));
+				System.out.println("There is no product with that ID registered");
 			}
-		} else {
-			System.out.println("There is no product with that ID registered");
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
+			System.out.println("Error, wrong format. Correct format is: 'info <productID>'");
 		}
 	}
 
@@ -204,21 +212,18 @@ public class Library {
 			oos1.writeObject(checkedOut);
 			oos1.close();
 			fos1.close();
-			System.out.println("Serialized HashMap data saved");
 
 			FileOutputStream fos2 = new FileOutputStream("treemap1.ser");
 			ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
 			oos2.writeObject(registry);
 			oos2.close();
 			fos2.close();
-			System.out.println("Serialized TreeMap data saved");
 
 			FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
 			ObjectOutputStream oos3 = new ObjectOutputStream(fos3);
 			oos3.writeObject(IDandTitle);
 			oos3.close();
 			fos3.close();
-			System.out.println("Serialized TreeMap data saved");
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -227,23 +232,42 @@ public class Library {
 	public void resume() {
 
 		try {
-			FileInputStream fis1 = new FileInputStream("hashmap.ser");
+			File file1 = new File("hashmap.ser");
+			File file2 = new File("treemap1.ser");
+			File file3 = new File("treemap2.ser");
+			
+		
+			if(!file1.exists()) {
+				file1.createNewFile();
+			}
+			if(file3.length() != 0) {
+			FileInputStream fis1 = new FileInputStream(file1);
 			ObjectInputStream ois1 = new ObjectInputStream(fis1);
-			checkedOut = (Map<Integer, Customer>) ois1.readObject();
+			checkedOut = (HashMap) ois1.readObject();
 			ois1.close();
 			fis1.close();
-
-			FileInputStream fis2 = new FileInputStream("treemap1.ser");
+			}
+			if(!file2.exists()) {
+				file2.createNewFile();
+			}
+			if(file2.length() != 0) {
+			FileInputStream fis2 = new FileInputStream(file2);
 			ObjectInputStream ois2 = new ObjectInputStream(fis2);
-			registry = (TreeMap<Integer, Masterpiece>) ois2.readObject();
+			registry = (TreeMap) ois2.readObject();
 			ois2.close();
 			fis2.close();
-
-			FileInputStream fis3 = new FileInputStream("treemap2.ser");
+			}
+			
+			if(!file3.exists()) {
+				file3.createNewFile();
+			}
+			if(file3.length() != 0) {
+			FileInputStream fis3 = new FileInputStream(file3);
 			ObjectInputStream ois3 = new ObjectInputStream(fis3);
-			IDandTitle = (HashMap<Integer, String>) ois3.readObject();
+			IDandTitle = (TreeMap) ois3.readObject();
 			ois3.close();
 			fis3.close();
+			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return;

@@ -211,7 +211,6 @@ public class Library {
 				ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
 				FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
 				ObjectOutputStream oos3 = new ObjectOutputStream(fos3);) {
-
 			oos1.writeObject(checkedOut);
 
 			oos2.writeObject(registry);

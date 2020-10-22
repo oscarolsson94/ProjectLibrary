@@ -1,14 +1,17 @@
-public class Book extends Masterpiece {
+import java.io.Serializable;
 
-	
+public class Book extends Masterpiece implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	int numberOfPages;
 	String publisher;
-	
+
 	public Book(int value, int productID, int numberOfPages, String publisher) {
 		super(value, productID);
 		this.numberOfPages = numberOfPages;
 		this.publisher = publisher;
-	}	
+	}
 
 	public int getNumberOfPages() {
 		return numberOfPages;

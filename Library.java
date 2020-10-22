@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.*;
 
 public class Library {
@@ -55,29 +56,28 @@ public class Library {
 	}
 
 	public void handleListCommand() {
-		
-		for (Integer x: registry.keySet()){
-            String key = x.toString();
-            String value = registry.get(x).toString();
-            
-            if(registry.get(x) instanceof Book) {
-            	if(checkedOut.containsKey(x)) {
-            System.out.println(key + " " + "(Book): "+ IDandTitle.get(x) + ". Borrowed by: " + checkedOut.containsKey(x));  
-            }
-            	else {
-            		System.out.println(key + " " + "(Book): "+ IDandTitle.get(x) + ". (in stock)"); 
-            	}
-            }
-            else if(registry.get(x) instanceof Movie) {
-            	if(checkedOut.containsKey(x)) {
-                    System.out.println(key + " " + "(Movie): "+ IDandTitle.get(x) + ". Borrowed by: " + checkedOut.containsKey(x));  
-                    }
-            	else {
-            		System.out.println(key + " " + "(Movie): "+ IDandTitle.get(x) + ". (in stock)"); 
-            	}
-            }
-            
-            } 		
+
+		for (Integer x : registry.keySet()) {
+			String key = x.toString();
+			String value = registry.get(x).toString();
+
+			if (registry.get(x) instanceof Book) {
+				if (checkedOut.containsKey(x)) {
+					System.out.println(
+							key + " " + "(Book): " + IDandTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
+				} else {
+					System.out.println(key + " " + "(Book): " + IDandTitle.get(x) + ". (in stock)");
+				}
+			} else if (registry.get(x) instanceof Movie) {
+				if (checkedOut.containsKey(x)) {
+					System.out.println(
+							key + " " + "(Movie): " + IDandTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
+				} else {
+					System.out.println(key + " " + "(Movie): " + IDandTitle.get(x) + ". (in stock)");
+				}
+			}
+
+		}
 	}
 
 	public void handleCheckinCommand(String[] argument) {
@@ -152,8 +152,7 @@ public class Library {
 					registry.put(prodID, new Book(value, prodID, pages, publisher));
 					IDandTitle.put(prodID, title);
 				}
-			}
-			else {
+			} else {
 				System.out.println("Unknown command, available commands are 'b' and 'm' ");
 			}
 
@@ -197,7 +196,64 @@ public class Library {
 		System.exit(0);
 	}
 
-	public void save() { // skriv ner arrayer till fil.
+	public void save() {
+
+		try {
+			FileOutputStream fos1 = new FileOutputStream("hashmap.ser");
+			ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
+			oos1.writeObject(checkedOut);
+			oos1.close();
+			fos1.close();
+			System.out.println("Serialized HashMap data saved");
+
+			FileOutputStream fos2 = new FileOutputStream("treemap1.ser");
+			ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+			oos2.writeObject(registry);
+			oos2.close();
+			fos2.close();
+			System.out.println("Serialized TreeMap data saved");
+
+			FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
+			ObjectOutputStream oos3 = new ObjectOutputStream(fos3);
+			oos3.writeObject(IDandTitle);
+			oos3.close();
+			fos3.close();
+			System.out.println("Serialized TreeMap data saved");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	public void resume() {
+
+		try {
+			FileInputStream fis1 = new FileInputStream("hashmap.ser");
+			ObjectInputStream ois1 = new ObjectInputStream(fis1);
+			checkedOut = (Map<Integer, Customer>) ois1.readObject();
+			ois1.close();
+			fis1.close();
+
+			FileInputStream fis2 = new FileInputStream("treemap1.ser");
+			ObjectInputStream ois2 = new ObjectInputStream(fis2);
+			registry = (TreeMap<Integer, Masterpiece>) ois2.readObject();
+			ois2.close();
+			fis2.close();
+
+			FileInputStream fis3 = new FileInputStream("treemap2.ser");
+			ObjectInputStream ois3 = new ObjectInputStream(fis3);
+			IDandTitle = (HashMap<Integer, String>) ois3.readObject();
+			ois3.close();
+			fis3.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return;
+		} catch (ClassNotFoundException c) {
+			System.out.println("Class not found");
+			c.printStackTrace();
+			return;
+		}
+		System.out.println("Successfully initialized state from files");
 
 	}
+
 }

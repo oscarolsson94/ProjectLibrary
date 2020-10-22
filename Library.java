@@ -92,7 +92,7 @@ public class Library {
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 
-			System.out.println("Error, wrong format. Correct format is: 'checkin <productID>'");
+			System.out.println("Syntax error. Correct format is: 'checkin <productID>'");
 		}
 	}
 
@@ -121,7 +121,7 @@ public class Library {
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 
-			System.out.println("Error, wrong format. Correct format is: 'checkout <productID>'");
+			System.out.println("Syntax error. Correct format is: 'checkout <productID>'");
 		}
 	}
 
@@ -197,7 +197,7 @@ public class Library {
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 
-			System.out.println("Error, wrong format. Correct format is: 'deregister <productID>'");
+			System.out.println("Syntax error. Correct format is: 'deregister <productID>'");
 		}
 	}
 
@@ -217,7 +217,7 @@ public class Library {
 				System.out.println("There is no product with that ID registered");
 			}
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
-			System.out.println("Error, wrong format. Correct format is: 'info <productID>'");
+			System.out.println("Syntax error. Correct format is: 'info <productID>'");
 		}
 	}
 

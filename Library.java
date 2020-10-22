@@ -80,84 +80,100 @@ public class Library {
 	}
 
 	public void handleCheckinCommand(String[] argument) {
-		int key = Integer.parseInt(argument[0]);
+		try {
+			int key = Integer.parseInt(argument[0]);
 
-		if (checkedOut.containsKey(key)) {
-			checkedOut.remove(key);
-			System.out.println("Successfully checked in " + IDandTitle.get(key) + " to the library");
-		} else {
-			System.out.println("There is no checked out product with that ID");
+			if (checkedOut.containsKey(key)) {
+				checkedOut.remove(key);
+				System.out.println("Successfully checked in " + IDandTitle.get(key) + " to the library");
+			} else {
+				System.out.println("There is no checked out product with that ID");
+			}
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
+
+			System.out.println("Error, wrong format. Correct format is: 'checkin <productID>'");
 		}
 	}
 
 	public void handleCheckoutCommand(String[] argument) {
-		int key = Integer.parseInt(argument[0]);
-		if (!checkedOut.containsKey(key)) {
-			System.out.println("Who is borrowing this book?");
+		try {
 			Scanner scan = new Scanner(System.in);
-			String name = scan.nextLine();
-			System.out.println("What is " + name + "'s " + "phone number?");
-			String number = scan.nextLine();
-			if (registry.containsKey(key)) {
-				checkedOut.put(key, new Customer(name, number));
-				System.out.println("Successfully checked out " + IDandTitle.get(key) + " to " + checkedOut.get(key));
+			int key = Integer.parseInt(argument[0]);
+			if (!checkedOut.containsKey(key)) {
+				System.out.println("Who is borrowing this book?");
 
+				String name = scan.nextLine();
+				System.out.println("What is " + name + "'s " + "phone number?");
+				String number = scan.nextLine();
+				if (registry.containsKey(key)) {
+					checkedOut.put(key, new Customer(name, number));
+					System.out
+							.println("Successfully checked out " + IDandTitle.get(key) + " to " + checkedOut.get(key));
+
+				} else {
+					System.out.println("There is no product with that ID registered");
+				}
 			} else {
-				System.out.println("There is no product with that ID registered");
+				System.out.println("That product is already borrowed by: " + checkedOut.get(key));
 			}
-		} else {
-			System.out.println("That product is already borrowed by: " + checkedOut.get(key));
+		} catch (NumberFormatException | IndexOutOfBoundsException e) {
+
+			System.out.println("Error, wrong format. Correct format is: 'checkout <productID>'");
 		}
 	}
 
 	public void handleRegisterCommand() {
-		Scanner scan = new Scanner(System.in);
 
-		System.out.println("Enter product ID:");
-		int prodID = Integer.parseInt(scan.nextLine());
-		System.out.println("What are you registering? Book (b), Movie (m):");
-		String bookOrMovie = scan.nextLine();
+		try {
+			Scanner scan = new Scanner(System.in);
+			System.out.println("Enter product ID:");
+			int prodID = Integer.parseInt(scan.nextLine());
+			System.out.println("What are you registering? Book (b), Movie (m):");
+			String bookOrMovie = scan.nextLine();
 
-		if (!registry.containsKey(prodID)) {
-			System.out.println("Enter title:");
-			String title = scan.nextLine();
-			System.out.println("Enter value:");
-			int value = Integer.parseInt(scan.nextLine());
+			if (!registry.containsKey(prodID)) {
+				System.out.println("Enter title:");
+				String title = scan.nextLine();
+				System.out.println("Enter value:");
+				int value = Integer.parseInt(scan.nextLine());
 
-			if (bookOrMovie.equals("m")) {
-				System.out.println("Enter length:");
-				int length = Integer.parseInt(scan.nextLine());
-				System.out.println("Enter rating:");
-				float rating = Float.parseFloat(scan.nextLine());
-				if (registry.containsKey(prodID)) {
-					System.out.println("Error: Product with ID " + prodID + " already registered");
-					scan.close();
-					return;
+				if (bookOrMovie.equals("m")) {
+					System.out.println("Enter length:");
+					int length = Integer.parseInt(scan.nextLine());
+					System.out.println("Enter rating:");
+					float rating = Float.parseFloat(scan.nextLine());
+					if (registry.containsKey(prodID)) {
+						System.out.println("Error: Product with ID " + prodID + " already registered");
+						scan.close();
+						return;
+					} else {
+						registry.put(prodID, new Movie(value, prodID, length, rating));
+						IDandTitle.put(prodID, title);
+					}
+				} else if (bookOrMovie.equals("b")) {
+					System.out.println("Enter number of pages:");
+					int pages = Integer.parseInt(scan.nextLine());
+					System.out.println("Enter publisher:");
+					String publisher = scan.nextLine();
+
+					if (registry.containsKey(prodID)) {
+						System.out.println("Error: Product with ID " + prodID + " already registered");
+						scan.close();
+						return;
+					} else {
+						registry.put(prodID, new Book(value, prodID, pages, publisher));
+						IDandTitle.put(prodID, title);
+					}
 				} else {
-					registry.put(prodID, new Movie(value, prodID, length, rating));
-					IDandTitle.put(prodID, title);
+					System.out.println("Unknown command, available commands are 'b' and 'm' ");
 				}
-			} else if (bookOrMovie.equals("b")) {
-				System.out.println("Enter number of pages:");
-				int pages = Integer.parseInt(scan.nextLine());
-				System.out.println("Enter publisher:");
-				String publisher = scan.nextLine();
 
-				if (registry.containsKey(prodID)) {
-					System.out.println("Error: Product with ID " + prodID + " already registered");
-					scan.close();
-					return;
-				} else {
-					registry.put(prodID, new Book(value, prodID, pages, publisher));
-					IDandTitle.put(prodID, title);
-				}
+				System.out.println("Successfully registered " + title);
 			} else {
-				System.out.println("Unknown command, available commands are 'b' and 'm' ");
+				System.out.println("A product with that ID is already registered");
 			}
-
-			System.out.println("Successfully registered " + title);
-		} else {
-			System.out.println("A product with that ID is already registered");
+		} catch (NumberFormatException e) {
+			System.out.println("Wrong format, enter valid type");
 		}
 	}
 

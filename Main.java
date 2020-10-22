@@ -7,12 +7,11 @@ public class Main {
 		Library library = new Library();
 		library.resume();
 
-		Scanner scan = new Scanner(System.in);
-
 		while (true) {
 
-			System.out.println("Welcome! Would you like to do?: list/checkout/checkin/register/deregister/info/quit");
-
+			System.out.println(
+					"Welcome! Would you like to do? Available commands are: list/checkout/checkin/register/deregister/info/quit");
+			Scanner scan = new Scanner(System.in);
 			String input = scan.nextLine();
 
 			Library.Command command = library.parseCommand(input);
@@ -48,7 +47,6 @@ public class Main {
 			}
 
 		}
-
 	}
 
 }

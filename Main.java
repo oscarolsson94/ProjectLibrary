@@ -19,7 +19,7 @@ public class Main {
 			Library.Command command = library.parseCommand(input);
 			String[] argument = library.parseArguments(input);
 
-			if (command == Library.Command.unknown) { // klar
+			if (command == Library.Command.unknown) { 
 				library.handleUnknownCommand();
 				library.save();
 
@@ -42,7 +42,7 @@ public class Main {
 			} else if (command == Library.Command.info) {
 				library.handleInfoCommand(argument);
 				library.save();
-			} else if (command == Library.Command.quit) // klar
+			} else if (command == Library.Command.quit)
 			{
 				library.handleQuitCommand();
 				library.save();

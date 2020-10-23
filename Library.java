@@ -81,7 +81,8 @@ public class Library {
 
 	public void handleCheckinCommand(String[] argument) {
 		try {
-			if(argument.length > 1) throw new IndexOutOfBoundsException();
+			if (argument.length > 1)
+				throw new IndexOutOfBoundsException();
 			int key = Integer.parseInt(argument[0]);
 
 			if (checkedOut.containsKey(key)) {
@@ -98,7 +99,8 @@ public class Library {
 
 	public void handleCheckoutCommand(String[] argument) {
 		try {
-			if(argument.length > 1) throw new IndexOutOfBoundsException();
+			if (argument.length > 1)
+				throw new IndexOutOfBoundsException();
 			Scanner scan = new Scanner(System.in);
 			int key = Integer.parseInt(argument[0]);
 			if (!checkedOut.containsKey(key)) {
@@ -128,13 +130,14 @@ public class Library {
 	public void handleRegisterCommand() {
 
 		try {
-			
+
 			Scanner scan = new Scanner(System.in);
 			System.out.println("Enter product ID:");
 			int prodID = Integer.parseInt(scan.nextLine());
 			System.out.println("What are you registering? Book (b), Movie (m):");
 			String bookOrMovie = scan.nextLine();
-			if(!(bookOrMovie.equals("b") || bookOrMovie.equals("m"))) throw new NumberFormatException();
+			if (!(bookOrMovie.equals("b") || bookOrMovie.equals("m")))
+				throw new NumberFormatException();
 
 			if (!registry.containsKey(prodID)) {
 				System.out.println("Enter title:");
@@ -184,7 +187,8 @@ public class Library {
 
 	public void handleDeregisterCommand(String[] argument) {
 		try {
-			if(argument.length > 1) throw new IndexOutOfBoundsException();
+			if (argument.length > 1)
+				throw new IndexOutOfBoundsException();
 			int key = Integer.parseInt(argument[0]);
 			if (registry.containsKey(key)) {
 				registry.remove(key);
@@ -203,7 +207,8 @@ public class Library {
 
 	public void handleInfoCommand(String[] argument) {
 		try {
-			if(argument.length > 1) throw new IndexOutOfBoundsException();
+			if (argument.length > 1)
+				throw new IndexOutOfBoundsException();
 			int temp = Integer.parseInt(argument[0]);
 			if (registry.containsKey(temp)) {
 				if (registry.get(temp) instanceof Movie) {
@@ -227,63 +232,53 @@ public class Library {
 	}
 
 	public void save() {
-
-		try (FileOutputStream fos1 = new FileOutputStream("hashmap.ser");
-				ObjectOutputStream oos1 = new ObjectOutputStream(fos1);
-				FileOutputStream fos2 = new FileOutputStream("treemap1.ser");
-				ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
-				FileOutputStream fos3 = new FileOutputStream("treemap2.ser");
-				ObjectOutputStream oos3 = new ObjectOutputStream(fos3);) {
-			oos1.writeObject(checkedOut);
-
-			oos2.writeObject(registry);
-
-			oos3.writeObject(IDandTitle);
-
-		} catch (IOException ioe) {
+		File[] fileArray = {new File("hashmap.ser"), new File("treemap1.ser"), new File("treemap2.ser")};
+		for (int i = 0; i < 3; i++) {
+		try (FileOutputStream fos = new FileOutputStream(fileArray[i]);
+				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
+			switch(i) {
+			case 0:
+				oos.writeObject(checkedOut);
+				break;
+			case 1:
+				oos.writeObject(registry);
+				break;
+			case 2:
+				oos.writeObject(IDandTitle);	
+				break;
+			}			
+		}
+		 catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+	}
 	}
 
 	public void resume() {
 
-		try {
-			File file1 = new File("hashmap.ser");
-			File file2 = new File("treemap1.ser");
-			File file3 = new File("treemap2.ser");
-
-			if (!file1.exists()) {
-				file1.createNewFile();
+		File[] fileArray = { new File("hashmap.ser"), new File("treemap1.ser"), new File("treemap2.ser") };
+		
+			for (int i = 0; i < 3; i++) {
+				try(FileInputStream fis = new FileInputStream(fileArray[i]);
+						ObjectInputStream ois = new ObjectInputStream(fis);) {
+				if (!fileArray[i].exists()) {
+					fileArray[i].createNewFile();
+				}
+				if (fileArray[i].length() != 0) {
+					switch (i) {
+					case 0:
+						checkedOut = (HashMap) ois.readObject();
+						break;
+					case 1:
+						registry = (TreeMap) ois.readObject();
+						break;
+					case 2:
+						IDandTitle = (TreeMap) ois.readObject();
+						break;
+					}
+				}
 			}
-			if (file1.length() != 0) {
-				FileInputStream fis1 = new FileInputStream(file1);
-				ObjectInputStream ois1 = new ObjectInputStream(fis1);
-				checkedOut = (HashMap) ois1.readObject();
-				ois1.close();
-				fis1.close();
-			}
-			if (!file2.exists()) {
-				file2.createNewFile();
-			}
-			if (file2.length() != 0) {
-				FileInputStream fis2 = new FileInputStream(file2);
-				ObjectInputStream ois2 = new ObjectInputStream(fis2);
-				registry = (TreeMap) ois2.readObject();
-				ois2.close();
-				fis2.close();
-			}
-
-			if (!file3.exists()) {
-				file3.createNewFile();
-			}
-			if (file3.length() != 0) {
-				FileInputStream fis3 = new FileInputStream(file3);
-				ObjectInputStream ois3 = new ObjectInputStream(fis3);
-				IDandTitle = (TreeMap) ois3.readObject();
-				ois3.close();
-				fis3.close();
-			}
-		} catch (IOException ioe) {
+		 catch (IOException ioe) {
 			ioe.printStackTrace();
 			return;
 		} catch (ClassNotFoundException c) {
@@ -291,8 +286,10 @@ public class Library {
 			c.printStackTrace();
 			return;
 		}
+			}		
 		System.out.println("Successfully initialized state from files");
 
 	}
 
 }
+

@@ -4,7 +4,7 @@ import java.util.*;
 public class Library {
 
 	public static Map<Integer, Masterpiece> registry = new TreeMap<>();
-	public static Map<Integer, String> IDandTitle = new TreeMap<>();
+	public static Map<Integer, String> idAndTitle = new TreeMap<>();
 	public static Map<Integer, Customer> checkedOut = new HashMap<>();
 
 	enum Command {
@@ -63,16 +63,16 @@ public class Library {
 			if (registry.get(x) instanceof Book) {
 				if (checkedOut.containsKey(x)) {
 					System.out.println(
-							key + " " + "(Book): " + IDandTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
+							key + " " + "(Book): " + idAndTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
 				} else {
-					System.out.println(key + " " + "(Book): " + IDandTitle.get(x) + ". (in stock)");
+					System.out.println(key + " " + "(Book): " + idAndTitle.get(x) + ". (in stock)");
 				}
 			} else if (registry.get(x) instanceof Movie) {
 				if (checkedOut.containsKey(x)) {
 					System.out.println(
-							key + " " + "(Movie): " + IDandTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
+							key + " " + "(Movie): " + idAndTitle.get(x) + ". Borrowed by: " + checkedOut.get(x));
 				} else {
-					System.out.println(key + " " + "(Movie): " + IDandTitle.get(x) + ". (in stock)");
+					System.out.println(key + " " + "(Movie): " + idAndTitle.get(x) + ". (in stock)");
 				}
 			}
 
@@ -87,7 +87,7 @@ public class Library {
 
 			if (checkedOut.containsKey(key)) {
 				checkedOut.remove(key);
-				System.out.println("Successfully checked in " + IDandTitle.get(key) + " to the library");
+				System.out.println("Successfully checked in " + idAndTitle.get(key) + " to the library");
 			} else {
 				System.out.println("There is no checked out product with that ID");
 			}
@@ -98,6 +98,7 @@ public class Library {
 	}
 
 	public void handleCheckoutCommand(String[] argument) {
+
 		try {
 			if (argument.length > 1)
 				throw new IndexOutOfBoundsException();
@@ -113,7 +114,7 @@ public class Library {
 				if (registry.containsKey(key)) {
 					checkedOut.put(key, new Customer(name, number));
 					System.out
-							.println("Successfully checked out " + IDandTitle.get(key) + " to " + checkedOut.get(key));
+							.println("Successfully checked out " + idAndTitle.get(key) + " to " + checkedOut.get(key));
 
 				} else {
 					System.out.println("There is no product with that ID registered");
@@ -121,10 +122,12 @@ public class Library {
 			} else {
 				System.out.println("That product is already borrowed by: " + checkedOut.get(key));
 			}
+
 		} catch (NumberFormatException | IndexOutOfBoundsException e) {
 
 			System.out.println("Syntax error. Correct format is: 'checkout <productID>'");
 		}
+
 	}
 
 	public void handleRegisterCommand() {
@@ -156,7 +159,7 @@ public class Library {
 						return;
 					} else {
 						registry.put(prodID, new Movie(value, prodID, length, rating));
-						IDandTitle.put(prodID, title);
+						idAndTitle.put(prodID, title);
 					}
 				} else if (bookOrMovie.equals("b")) {
 					System.out.println("Enter number of pages:");
@@ -170,7 +173,7 @@ public class Library {
 						return;
 					} else {
 						registry.put(prodID, new Book(value, prodID, pages, publisher));
-						IDandTitle.put(prodID, title);
+						idAndTitle.put(prodID, title);
 					}
 				} else {
 					System.out.println("Unknown command, available commands are 'b' and 'm' ");
@@ -192,8 +195,8 @@ public class Library {
 			int key = Integer.parseInt(argument[0]);
 			if (registry.containsKey(key)) {
 				registry.remove(key);
-				System.out.println("Successfully deregistered " + IDandTitle.get(key));
-				IDandTitle.remove(key);
+				System.out.println("Successfully deregistered " + idAndTitle.get(key));
+				idAndTitle.remove(key);
 				if (checkedOut.containsKey(key))
 					checkedOut.remove(key);
 			} else {
@@ -212,10 +215,10 @@ public class Library {
 			int temp = Integer.parseInt(argument[0]);
 			if (registry.containsKey(temp)) {
 				if (registry.get(temp) instanceof Movie) {
-					System.out.println("(Movie) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
+					System.out.println("(Movie) " + idAndTitle.get(temp) + ": " + "Value " + registry.get(temp).value
 							+ "kr, " + registry.get(temp));
 				} else {
-					System.out.println("(Book) " + IDandTitle.get(temp) + ": " + "Value " + registry.get(temp).value
+					System.out.println("(Book) " + idAndTitle.get(temp) + ": " + "Value " + registry.get(temp).value
 							+ "kr, " + registry.get(temp));
 				}
 			} else {
@@ -232,35 +235,34 @@ public class Library {
 	}
 
 	public void save() {
-		File[] fileArray = {new File("hashmap.ser"), new File("treemap1.ser"), new File("treemap2.ser")};
+		File[] fileArray = { new File("hashmap.ser"), new File("treemap1.ser"), new File("treemap2.ser") };
 		for (int i = 0; i < 3; i++) {
-		try (FileOutputStream fos = new FileOutputStream(fileArray[i]);
-				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
-			switch(i) {
-			case 0:
-				oos.writeObject(checkedOut);
-				break;
-			case 1:
-				oos.writeObject(registry);
-				break;
-			case 2:
-				oos.writeObject(IDandTitle);	
-				break;
-			}			
+			try (FileOutputStream fos = new FileOutputStream(fileArray[i]);
+					ObjectOutputStream oos = new ObjectOutputStream(fos);) {
+				switch (i) {
+				case 0:
+					oos.writeObject(checkedOut);
+					break;
+				case 1:
+					oos.writeObject(registry);
+					break;
+				case 2:
+					oos.writeObject(idAndTitle);
+					break;
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
-		 catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
 	}
 
 	public void resume() {
 
 		File[] fileArray = { new File("hashmap.ser"), new File("treemap1.ser"), new File("treemap2.ser") };
-		
-			for (int i = 0; i < 3; i++) {
-				try(FileInputStream fis = new FileInputStream(fileArray[i]);
-						ObjectInputStream ois = new ObjectInputStream(fis);) {
+
+		for (int i = 0; i < 3; i++) {
+			try (FileInputStream fis = new FileInputStream(fileArray[i]);
+					ObjectInputStream ois = new ObjectInputStream(fis);) {
 				if (!fileArray[i].exists()) {
 					fileArray[i].createNewFile();
 				}
@@ -273,23 +275,21 @@ public class Library {
 						registry = (TreeMap) ois.readObject();
 						break;
 					case 2:
-						IDandTitle = (TreeMap) ois.readObject();
+						idAndTitle = (TreeMap) ois.readObject();
 						break;
 					}
 				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				return;
+			} catch (ClassNotFoundException c) {
+				System.out.println("Class not found");
+				c.printStackTrace();
+				return;
 			}
-		 catch (IOException ioe) {
-			ioe.printStackTrace();
-			return;
-		} catch (ClassNotFoundException c) {
-			System.out.println("Class not found");
-			c.printStackTrace();
-			return;
 		}
-			}		
 		System.out.println("Successfully initialized state from files");
 
 	}
 
 }
-

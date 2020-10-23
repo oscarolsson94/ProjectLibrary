@@ -6,9 +6,9 @@ public class Main {
 
 		Library library = new Library();
 		library.resume();
-		
+
 		System.out.println("Welcome!");
-		
+
 		while (true) {
 
 			System.out.println(
@@ -19,7 +19,7 @@ public class Main {
 			Library.Command command = library.parseCommand(input);
 			String[] argument = library.parseArguments(input);
 
-			if (command == Library.Command.unknown) { 
+			if (command == Library.Command.unknown) {
 				library.handleUnknownCommand();
 				library.save();
 
@@ -42,8 +42,7 @@ public class Main {
 			} else if (command == Library.Command.info) {
 				library.handleInfoCommand(argument);
 				library.save();
-			} else if (command == Library.Command.quit)
-			{
+			} else if (command == Library.Command.quit) {
 				library.handleQuitCommand();
 				library.save();
 			}

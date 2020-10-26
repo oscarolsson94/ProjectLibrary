@@ -14,5 +14,7 @@ Masterpiece,
 Movie,
 Book.
 
+Proceed to run the program from the Main-class. From there on, follow the instructions given by the program.
+
 You can download the .ser-files if you want, that will give you an initialized inventory.
-If you choose not to, these files will be craeted upon running the application for the first time.
+If you choose not to, these files will be created upon running the application for the first time.
